@@ -48,28 +48,29 @@ const AppInventory = (() => {
 
   // ── Category Sidebar ───────────────────────────────────────────────
   function renderCatSidebar() {
-    const grid = document.getElementById('cat-grid');
-    const cats = DB.Categories.all();
+    const grid     = document.getElementById('cat-grid');
+    const cats     = DB.Categories.all();
     const products = DB.Products.all();
 
     const allBtn = `<button class="cat-btn-all ${currentCat === '' ? 'active' : ''}" onclick="AppInventory.setCat('')">
-      <i class="ti ti-layout-list" style="font-size:14px"></i> All products
+      <i class="ti ti-layout-list" style="font-size:14px" aria-hidden="true"></i> All products
     </button>`;
 
     const catBtns = cats.map(c => {
       const count = products.filter(p => p.category === c.name).length;
       const name  = c.name.replace(/'/g, "\\'");
+      const icon  = FruitIcons.get(c.name, c.fg, 26);
       return `<button class="cat-btn ${currentCat === c.name ? 'active' : ''}"
         onclick="AppInventory.setCat('${name}')"
         style="background:${c.bg};color:${c.fg}">
-        <span class="cat-icon">${c.icon}</span>
-        <span style="font-size:11px;font-weight:500">${c.name}</span>
+        <span class="cat-svg-icon">${icon}</span>
+        <span class="cat-label">${c.name}</span>
         ${count > 0 ? `<span class="cat-count">${count}</span>` : ''}
       </button>`;
     }).join('');
 
     const addBtn = `<button class="add-cat-btn" onclick="AppInventory.openCatManager()">
-      <i class="ti ti-plus" style="font-size:18px"></i>
+      <i class="ti ti-plus" style="font-size:18px" aria-hidden="true"></i>
       <span>Add</span>
     </button>`;
 
@@ -271,47 +272,152 @@ const AppInventory = (() => {
   }
 
   // ── Category Manager ───────────────────────────────────────────────
+  let editingCatId = null;
+
   function openCatManager() {
+    editingCatId = null;
+    renderCatManagerGrid();
+    renderIconPicker(null);
+    document.getElementById('cat-modal').classList.add('open');
+    document.getElementById('cat-edit-panel').style.display = 'none';
+    document.getElementById('cat-add-panel').style.display  = 'block';
+    document.getElementById('new-cat-name').value = '';
+    document.getElementById('cat-modal-title').textContent  = 'Manage categories';
+    document.getElementById('cat-save-btn').textContent     = 'Add category';
+  }
+
+  function renderCatManagerGrid() {
     const grid = document.getElementById('cat-manage-grid');
     const cats = DB.Categories.all();
-    grid.innerHTML = cats.map(c => `
-      <div class="cmi" style="background:${c.bg};color:${c.fg}">
-        <button class="cmi-del" onclick="AppInventory.deleteCat(${c.id})" style="color:${c.fg};opacity:.7" title="Remove">
-          <i class="ti ti-x"></i>
-        </button>
-        <span style="font-size:22px">${c.icon}</span>
-        <span style="font-size:12px;font-weight:500">${c.name}</span>
-      </div>`
-    ).join('');
-    document.getElementById('cat-modal').classList.add('open');
+    const products = DB.Products.all();
+    grid.innerHTML = cats.map(c => {
+      const count = products.filter(p => p.category === c.name).length;
+      const icon  = FruitIcons.get(c.name, c.fg, 28);
+      return `<div class="cmi" style="background:${c.bg};color:${c.fg}" title="${c.name}">
+        <div class="cmi-actions">
+          <button class="cmi-act cmi-edit" onclick="AppInventory.startEditCat(${c.id})" title="Edit" style="color:${c.fg}" aria-label="Edit ${c.name}">
+            <i class="ti ti-edit" aria-hidden="true"></i>
+          </button>
+          <button class="cmi-act cmi-del" onclick="AppInventory.deleteCat(${c.id})" title="Delete" style="color:${c.fg}" aria-label="Delete ${c.name}">
+            <i class="ti ti-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="cmi-icon">${icon}</div>
+        <span class="cmi-name">${c.name}</span>
+        ${count > 0 ? `<span class="cmi-count">${count}</span>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  function renderIconPicker(selectedName) {
+    const wrap  = document.getElementById('icon-picker');
+    const names = FruitIcons.all();
+    wrap.innerHTML = names.map(n => {
+      const isSel = n === selectedName;
+      return `<button class="icon-pick-btn ${isSel ? 'selected' : ''}"
+        onclick="AppInventory.selectIcon('${n}')"
+        title="${n}" aria-label="${n} icon"
+        data-name="${n}">
+        ${FruitIcons.get(n, 'currentColor', 22)}
+      </button>`;
+    }).join('');
+  }
+
+  function selectIcon(name) {
+    document.querySelectorAll('.icon-pick-btn').forEach(b => {
+      b.classList.toggle('selected', b.dataset.name === name);
+    });
+    document.getElementById('selected-icon-name').value = name;
+  }
+
+  function startEditCat(id) {
+    const c = DB.Categories.all().find(x => x.id === id);
+    if (!c) return;
+    editingCatId = id;
+    document.getElementById('cat-modal-title').textContent       = 'Edit category';
+    document.getElementById('cat-add-panel').style.display       = 'none';
+    document.getElementById('cat-edit-panel').style.display      = 'block';
+    document.getElementById('cat-cancel-btn').style.display      = 'inline-flex';
+    document.getElementById('edit-cat-name').value               = c.name;
+    const colorSel = document.getElementById('edit-cat-color');
+    const matchVal = `${c.bg},${c.fg}`;
+    const found    = Array.from(colorSel.options).find(o => o.value === matchVal);
+    colorSel.value = found ? matchVal : colorSel.options[0].value;
+    renderIconPicker(c.iconName || c.name);
+    document.getElementById('selected-icon-name').value          = c.iconName || c.name;
+    document.getElementById('cat-save-btn').textContent          = 'Save changes';
+  }
+
+  function saveCategory() {
+    if (editingCatId) {
+      // — Save edits —
+      const name = document.getElementById('edit-cat-name').value.trim();
+      if (!name) { showToast('Category name is required'); return; }
+      const [bg, fg]   = document.getElementById('edit-cat-color').value.split(',');
+      const iconName   = document.getElementById('selected-icon-name').value || name;
+      const oldCat     = DB.Categories.all().find(c => c.id === editingCatId);
+      DB.Categories.save(
+        DB.Categories.all().map(c =>
+          c.id === editingCatId ? { ...c, name, bg, fg, iconName } : c
+        )
+      );
+      // Rename products if name changed
+      if (oldCat && oldCat.name !== name) {
+        DB.Products.save(DB.Products.all().map(p =>
+          p.category === oldCat.name ? { ...p, category: name } : p
+        ));
+      }
+      showToast('Category updated');
+    } else {
+      // — Add new —
+      const name = document.getElementById('new-cat-name').value.trim();
+      if (!name) { showToast('Please enter a category name'); return; }
+      const [bg, fg]  = document.getElementById('new-cat-color').value.split(',');
+      const iconName  = document.getElementById('selected-icon-name').value || name;
+      DB.Categories.add({ name, bg, fg, iconName });
+      document.getElementById('new-cat-name').value = '';
+      showToast('Category added');
+    }
+    editingCatId = null;
+    renderCatManagerGrid();
+    renderCatSidebar();
+    updateCategorySelect();
+    document.getElementById('cat-edit-panel').style.display = 'none';
+    document.getElementById('cat-add-panel').style.display  = 'block';
+    document.getElementById('cat-modal-title').textContent  = 'Manage categories';
+    document.getElementById('cat-save-btn').textContent     = 'Add category';
+  }
+
+  function cancelEditCat() {
+    editingCatId = null;
+    document.getElementById('cat-edit-panel').style.display      = 'none';
+    document.getElementById('cat-add-panel').style.display       = 'block';
+    document.getElementById('cat-cancel-btn').style.display      = 'none';
+    document.getElementById('cat-modal-title').textContent       = 'Manage categories';
+    document.getElementById('cat-save-btn').textContent          = 'Add category';
+    renderIconPicker(null);
   }
 
   function deleteCat(id) {
-    if (!confirm('Remove this category? Products in it will become uncategorised.')) return;
-    const cat  = DB.Categories.all().find(c => c.id === id);
+    const c = DB.Categories.all().find(x => x.id === id);
+    if (!c) return;
+    const count = DB.Products.all().filter(p => p.category === c.name).length;
+    const msg   = count > 0
+      ? `Remove "${c.name}"? ${count} product${count > 1 ? 's' : ''} will become uncategorised.`
+      : `Remove "${c.name}"?`;
+    if (!confirm(msg)) return;
     DB.Categories.delete(id);
-    // Uncategorise affected products
-    const products = DB.Products.all().map(p =>
-      p.category === cat?.name ? { ...p, category: '' } : p
-    );
-    DB.Products.save(products);
-    openCatManager();
+    DB.Products.save(DB.Products.all().map(p =>
+      p.category === c.name ? { ...p, category: '' } : p
+    ));
+    renderCatManagerGrid();
     renderCatSidebar();
     renderTable();
     showToast('Category removed');
   }
 
-  function addCategory() {
-    const name = document.getElementById('new-cat-name').value.trim();
-    if (!name) { showToast('Please enter a category name'); return; }
-    const [bg, fg] = document.getElementById('new-cat-color').value.split(',');
-    DB.Categories.add({ name, icon: '🍀', bg, fg });
-    document.getElementById('new-cat-name').value = '';
-    openCatManager();
-    renderCatSidebar();
-    updateCategorySelect();
-    showToast('Category added');
-  }
+  // Keep old addCategory for backward compat (now handled by saveCategory)
+  function addCategory() { saveCategory(); }
 
   // ── Modal helpers ──────────────────────────────────────────────────
   function closeModal(id) {
@@ -336,7 +442,9 @@ const AppInventory = (() => {
     setCat, setStatus, sortBy,
     toggleStatus, deleteProduct,
     openAddProduct, openEdit, saveProduct,
-    openCatManager, deleteCat, addCategory,
+    openCatManager, renderCatManagerGrid,
+    startEditCat, cancelEditCat, saveCategory,
+    selectIcon, deleteCat, addCategory,
     closeModal, handleOverlayClick,
   };
 })();
@@ -354,6 +462,8 @@ function openAddProduct()          { AppInventory.openAddProduct(); }
 function saveProduct()             { AppInventory.saveProduct(); }
 function openCatManager()          { AppInventory.openCatManager(); }
 function addCategory()             { AppInventory.addCategory(); }
+function saveCategory()            { AppInventory.saveCategory(); }
+function cancelEditCat()           { AppInventory.cancelEditCat(); }
 function closeModal(id)            { AppInventory.closeModal(id); }
 function handleOverlayClick(e, id) { AppInventory.handleOverlayClick(e, id); }
 function setStatus(s)              { AppInventory.setStatus(s); }

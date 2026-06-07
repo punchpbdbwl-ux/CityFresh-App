@@ -12,303 +12,146 @@
 </head>
 <body>
 
-  <!-- ══════════ LOGIN PAGE ══════════ -->
-  <div id="pg-login" class="page active">
-    <div class="login-outer">
-      <div class="login-card">
-
-        <div class="login-logo">
-          <svg width="54" height="54" viewBox="0 0 54 54" fill="none">
-            <circle cx="27" cy="27" r="25.5" stroke="#8BAC4A" stroke-width="1.5"/>
-            <path d="M27 11C27 11,39 18,39 28C39 36,34 43,27 43C20 43,15 36,15 28C15 18,27 11,27 11Z" fill="#8BAC4A"/>
-            <line x1="27" y1="43" x2="27" y2="32" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
-            <line x1="27" y1="37" x2="32" y2="31" stroke="#1A1A1A" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
-          <div class="login-brand">City<span>Fresh</span></div>
-          <div class="login-tagline">Fruit Lovers' Community</div>
-        </div>
-
-        <div class="tabs" id="tabs">
-          <button class="tab active" id="t-si" onclick="switchTab('si')">Sign in</button>
-          <button class="tab" id="t-reg" onclick="switchTab('reg')">Create account</button>
-        </div>
-
-        <!-- SIGN IN -->
-        <div id="p-si">
-          <div class="field">
-            <label>Email address</label>
-            <div class="field-wrap">
-              <input type="email" id="si-email" placeholder="you@cityfresh.com" autocomplete="email" />
-              <i class="ti ti-mail fi" aria-hidden="true"></i>
-            </div>
-            <span class="err-msg" id="si-email-err">Please enter a valid email.</span>
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <div class="field-wrap">
-              <input type="password" id="si-pw" placeholder="Your password" autocomplete="current-password" />
-              <i class="ti ti-eye fi" id="si-ei" onclick="togglePw('si-pw','si-ei')" role="button" aria-label="Show password"></i>
-            </div>
-            <span class="err-msg" id="si-pw-err">Incorrect password.</span>
-          </div>
-          <div class="field-row">
-            <label class="chk-wrap">
-              <input type="checkbox" id="si-rem" />
-              <span>Remember me</span>
-            </label>
-            <button class="forgot-btn" onclick="showForgot()">Forgot password?</button>
-          </div>
-          <button class="submit-btn" onclick="doSignIn()">
-            <i class="ti ti-login" style="font-size:16px"></i> Sign in
-          </button>
-          <div class="success-msg" id="si-ok"></div>
-          <div class="divider">or</div>
-          <p class="switch-line">No account? <button class="link-btn" onclick="switchTab('reg')">Create one</button></p>
-        </div>
-
-        <!-- REGISTER -->
-        <div id="p-reg" style="display:none">
-          <div class="field">
-            <label>Full name</label>
-            <div class="field-wrap">
-              <input type="text" id="r-name" placeholder="Your name" autocomplete="name" />
-              <i class="ti ti-user fi" aria-hidden="true"></i>
-            </div>
-            <span class="err-msg" id="r-name-err">Please enter your name.</span>
-          </div>
-          <div class="field">
-            <label>Email address</label>
-            <div class="field-wrap">
-              <input type="email" id="r-email" placeholder="you@cityfresh.com" autocomplete="email" />
-              <i class="ti ti-mail fi" aria-hidden="true"></i>
-            </div>
-            <span class="err-msg" id="r-email-err">Please enter a valid email.</span>
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <div class="field-wrap">
-              <input type="password" id="r-pw" placeholder="Min 8 characters" autocomplete="new-password" oninput="checkStrength()" />
-              <i class="ti ti-eye fi" id="r-ei" onclick="togglePw('r-pw','r-ei')" role="button" aria-label="Show password"></i>
-            </div>
-            <div class="pw-strength"><div class="pw-bar" id="pw-bar"></div></div>
-            <div class="pw-hint" id="pw-hint">Use 8+ characters with letters and numbers.</div>
-          </div>
-          <div class="field" style="margin-bottom:20px">
-            <label>Confirm password</label>
-            <div class="field-wrap">
-              <input type="password" id="r-pw2" placeholder="Repeat password" autocomplete="new-password" />
-              <i class="ti ti-eye fi" id="r-e2i" onclick="togglePw('r-pw2','r-e2i')" role="button" aria-label="Show password"></i>
-            </div>
-            <span class="err-msg" id="r-match-err">Passwords do not match.</span>
-          </div>
-          <button class="submit-btn" onclick="doRegister()">
-            <i class="ti ti-user-plus" style="font-size:16px"></i> Create account
-          </button>
-          <div class="success-msg" id="r-ok"></div>
-          <div class="divider">or</div>
-          <p class="switch-line">Have an account? <button class="link-btn" onclick="switchTab('si')">Sign in</button></p>
-        </div>
-
-        <!-- FORGOT PASSWORD -->
-        <div id="p-fgt" style="display:none">
-          <button class="back-btn" onclick="showForgot(true)">
-            <i class="ti ti-arrow-left" style="font-size:13px"></i> Back to sign in
-          </button>
-          <p class="fgt-desc">Enter your email and we'll send a reset link.</p>
-          <div class="field">
-            <label>Email address</label>
-            <div class="field-wrap">
-              <input type="email" id="fg-email" placeholder="you@cityfresh.com" />
-              <i class="ti ti-mail fi" aria-hidden="true"></i>
-            </div>
-          </div>
-          <button class="submit-btn" onclick="doForgot()">
-            <i class="ti ti-send" style="font-size:16px"></i> Send reset link
-          </button>
-          <div class="success-msg" id="fg-ok"></div>
-        </div>
-
+  <!-- ══════════ APP ══════════ -->
+  <header class="app-header">
+    <div class="header-left">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <circle cx="18" cy="18" r="17" stroke="#8BAC4A" stroke-width="1.5"/>
+        <path d="M18 8C18 8,26 13,26 20C26 25,22 29,18 29C14 29,10 25,10 20C10 13,18 8,18 8Z" fill="#8BAC4A"/>
+        <line x1="18" y1="29" x2="18" y2="22" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="18" y1="25" x2="21" y2="21" stroke="#1A1A1A" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="header-brand">City<span>Fresh</span></div>
+        <div class="header-sub">Fruit Lovers' Community</div>
       </div>
     </div>
-  </div>
+    <div class="header-right">
+      <div class="header-stats">
+        <div class="hstat"><div class="hstat-num" id="s-total">0</div><div class="hstat-lbl">Products</div></div>
+        <div class="hstat"><div class="hstat-num" id="s-active">0</div><div class="hstat-lbl">Active</div></div>
+        <div class="hstat"><div class="hstat-num" id="s-cats">0</div><div class="hstat-lbl">Categories</div></div>
+      </div>
+    </div>
+  </header>
 
-  <!-- ══════════ LOADING PAGE ══════════ -->
-  <div id="pg-load" class="page">
-    <div id="blobs"></div>
-    <div class="load-center">
-      <div class="load-ring-wrap">
-        <svg class="load-ring" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="54" fill="none" stroke="#242320" stroke-width="2"/>
-          <circle cx="60" cy="60" r="54" fill="none" stroke="#8BAC4A" stroke-width="2"
-            stroke-dasharray="50 290" stroke-linecap="round"/>
-          <circle cx="60" cy="6" r="4" fill="#8BAC4A"/>
-          <circle cx="114" cy="60" r="3" fill="#C8A832" opacity=".6"/>
-          <circle cx="60" cy="114" r="3" fill="#D4537E" opacity=".5"/>
-        </svg>
-        <div class="load-ring-center">
-          <svg width="48" height="48" viewBox="0 0 54 54" fill="none">
-            <circle cx="27" cy="27" r="25.5" stroke="#8BAC4A" stroke-width="1.5"/>
-            <path d="M27 11C27 11,39 18,39 28C39 36,34 43,27 43C20 43,15 36,15 28C15 18,27 11,27 11Z" fill="#8BAC4A"/>
-            <line x1="27" y1="43" x2="27" y2="32" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
-            <line x1="27" y1="37" x2="32" y2="31" stroke="#1A1A1A" stroke-width="1.3" stroke-linecap="round"/>
-          </svg>
+  <div class="app-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="section-title">Search</div>
+        <div class="search-wrap">
+          <i class="ti ti-search" aria-hidden="true"></i>
+          <input type="text" id="search" placeholder="Product, variety, origin…" />
         </div>
       </div>
-      <div class="load-brand">City<span>Fresh</span></div>
-      <div class="load-tagline">Fruit Lovers' Community</div>
-      <div class="load-fruits" id="load-fruits"></div>
-      <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
-      <div class="load-status" id="load-status">Preparing your workspace…</div>
-    </div>
-  </div>
+      <div class="sidebar-section">
+        <div class="section-title">Status</div>
+        <div class="status-filters">
+          <button class="sf-btn active" id="sf-all" onclick="setStatus('')">All</button>
+          <button class="sf-btn" id="sf-on" onclick="setStatus('ON')"><span class="dot dot-on"></span>Active</button>
+          <button class="sf-btn" id="sf-off" onclick="setStatus('OFF')"><span class="dot dot-off"></span>Off</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="section-title">Categories</div>
+        <div class="cat-grid" id="cat-grid"></div>
+      </div>
+    </aside>
 
-  <!-- ══════════ APP PAGE ══════════ -->
-  <div id="pg-app" class="page">
-
-    <header class="app-header">
-      <div class="header-left">
-        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-          <circle cx="18" cy="18" r="17" stroke="#8BAC4A" stroke-width="1.5"/>
-          <path d="M18 8C18 8,26 13,26 20C26 25,22 29,18 29C14 29,10 25,10 20C10 13,18 8,18 8Z" fill="#8BAC4A"/>
-          <line x1="18" y1="29" x2="18" y2="22" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="18" y1="25" x2="21" y2="21" stroke="#1A1A1A" stroke-width="1" stroke-linecap="round"/>
-        </svg>
+    <!-- MAIN CONTENT -->
+    <main class="content">
+      <div class="content-header">
         <div>
-          <div class="header-brand">City<span>Fresh</span></div>
-          <div class="header-sub">Fruit Lovers' Community</div>
+          <div class="content-title" id="content-title">All Products</div>
+          <div class="content-sub" id="content-sub">Showing all categories</div>
+        </div>
+        <div class="toolbar">
+          <button class="tb-btn" onclick="openCatManager()">
+            <i class="ti ti-layout-grid" style="font-size:14px"></i> Manage categories
+          </button>
+          <button class="tb-btn tb-btn-import" onclick="openImportModal()">
+            <i class="ti ti-upload" style="font-size:14px"></i> Import CSV / Excel
+          </button>
+          <button class="tb-btn tb-btn-primary" onclick="openAddProduct()">
+            <i class="ti ti-plus" style="font-size:14px"></i> Add product
+          </button>
         </div>
       </div>
-      <div class="header-right">
-        <div class="header-stats">
-          <div class="hstat"><div class="hstat-num" id="s-total">0</div><div class="hstat-lbl">Products</div></div>
-          <div class="hstat"><div class="hstat-num" id="s-active">0</div><div class="hstat-lbl">Active</div></div>
-          <div class="hstat"><div class="hstat-num" id="s-cats">0</div><div class="hstat-lbl">Categories</div></div>
-        </div>
-        <div class="user-info">
-          <div class="user-avatar" id="user-avatar">CF</div>
-          <div>
-            <div class="user-name" id="user-name"></div>
-            <div class="user-email" id="user-email"></div>
-          </div>
-        </div>
-        <button class="logout-btn" onclick="doLogout()">
-          <i class="ti ti-logout" style="font-size:13px"></i> Sign out
-        </button>
+      <div class="table-scroll">
+        <table id="product-table">
+          <thead>
+            <tr>
+              <th onclick="sortBy('direct')" id="th-direct">Status</th>
+              <th onclick="sortBy('category')" id="th-category">Category</th>
+              <th onclick="sortBy('productOdoo')" id="th-productOdoo">Product</th>
+              <th onclick="sortBy('secondUom')" id="th-secondUom">UOM</th>
+              <th onclick="sortBy('size')" id="th-size">Size</th>
+              <th onclick="sortBy('variety')" id="th-variety">Variety</th>
+              <th onclick="sortBy('origins')" id="th-origins">Origin</th>
+              <th onclick="sortBy('qty')" id="th-qty" class="num">Qty</th>
+              <th onclick="sortBy('unit')" id="th-unit">Unit</th>
+              <th onclick="sortBy('retailPrice')" id="th-retailPrice" class="num">Retail ฿</th>
+              <th onclick="sortBy('onlinePrice')" id="th-onlinePrice" class="num">Online ฿</th>
+              <th onclick="sortBy('onlineTotal')" id="th-onlineTotal" class="num">Total ฿</th>
+              <th style="width:70px"></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
       </div>
-    </header>
+      <div class="empty-state" id="empty-state" style="display:none">
+        <i class="ti ti-basket-off" aria-hidden="true"></i>
+        <p>No products found.</p>
+      </div>
+    </main>
+  </div>
 
-    <div class="app-body">
-
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <div class="section-title">Search</div>
-          <div class="search-wrap">
-            <i class="ti ti-search" aria-hidden="true"></i>
-            <input type="text" id="search" placeholder="Product, variety, origin…" />
-          </div>
-        </div>
-        <div class="sidebar-section">
-          <div class="section-title">Status</div>
-          <div class="status-filters">
-            <button class="sf-btn active" id="sf-all" onclick="setStatus('')">All</button>
-            <button class="sf-btn" id="sf-on" onclick="setStatus('ON')"><span class="dot dot-on"></span>Active</button>
-            <button class="sf-btn" id="sf-off" onclick="setStatus('OFF')"><span class="dot dot-off"></span>Off</button>
-          </div>
-        </div>
-        <div class="sidebar-section">
-          <div class="section-title">Categories</div>
-          <div class="cat-grid" id="cat-grid"></div>
-        </div>
-      </aside>
-
-      <!-- MAIN CONTENT -->
-      <main class="content">
-        <div class="content-header">
-          <div>
-            <div class="content-title" id="content-title">All Products</div>
-            <div class="content-sub" id="content-sub">Showing all categories</div>
-          </div>
-          <div class="toolbar">
-            <button class="tb-btn" onclick="openCatManager()">
-              <i class="ti ti-layout-grid" style="font-size:14px"></i> Manage categories
-            </button>
-            <button class="tb-btn tb-btn-import" onclick="openImportModal()">
-              <i class="ti ti-upload" style="font-size:14px"></i> Import CSV / Excel
-            </button>
-            <button class="tb-btn tb-btn-primary" onclick="openAddProduct()">
-              <i class="ti ti-plus" style="font-size:14px"></i> Add product
-            </button>
-          </div>
-        </div>
-        <div class="table-scroll">
-          <table id="product-table">
-            <thead>
-              <tr>
-                <th onclick="sortBy('direct')" id="th-direct">Status</th>
-                <th onclick="sortBy('category')" id="th-category">Category</th>
-                <th onclick="sortBy('productOdoo')" id="th-productOdoo">Product</th>
-                <th onclick="sortBy('secondUom')" id="th-secondUom">UOM</th>
-                <th onclick="sortBy('size')" id="th-size">Size</th>
-                <th onclick="sortBy('variety')" id="th-variety">Variety</th>
-                <th onclick="sortBy('origins')" id="th-origins">Origin</th>
-                <th onclick="sortBy('qty')" id="th-qty" class="num">Qty</th>
-                <th onclick="sortBy('unit')" id="th-unit">Unit</th>
-                <th onclick="sortBy('retailPrice')" id="th-retailPrice" class="num">Retail ฿</th>
-                <th onclick="sortBy('onlinePrice')" id="th-onlinePrice" class="num">Online ฿</th>
-                <th onclick="sortBy('onlineTotal')" id="th-onlineTotal" class="num">Total ฿</th>
-                <th style="width:70px"></th>
-              </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-        <div class="empty-state" id="empty-state" style="display:none">
-          <i class="ti ti-basket-off" aria-hidden="true"></i>
-          <p>No products found.</p>
-        </div>
-      </main>
-    </div>
-
-    <!-- PRODUCT MODAL -->
-    <div class="modal-overlay" id="prod-modal" onclick="handleOverlayClick(event,'prod-modal')">
-      <div class="modal" role="dialog" aria-labelledby="prod-modal-title">
-        <button class="modal-close" onclick="closeModal('prod-modal')" aria-label="Close"><i class="ti ti-x"></i></button>
-        <h3 id="prod-modal-title">Add product</h3>
-        <div class="form-grid">
-          <div class="fg"><label>Status</label><select id="f-direct"><option value="ON">Active (ON)</option><option value="OFF">Inactive (OFF)</option></select></div>
-          <div class="fg"><label>Category</label><select id="f-category"></select></div>
-          <div class="fg full"><label>Product name (ODOO)</label><input type="text" id="f-productOdoo" /></div>
-          <div class="fg full"><label>Thai name</label><input type="text" id="f-productTH" /></div>
-          <div class="fg"><label>UOM / weight</label><input type="text" id="f-secondUom" /></div>
-          <div class="fg"><label>Cost</label><input type="number" id="f-cost" step="0.01" /></div>
-          <div class="fg"><label>Size</label><input type="text" id="f-size" /></div>
-          <div class="fg"><label>Variety</label><input type="text" id="f-variety" /></div>
-          <div class="fg"><label>Brand</label><input type="text" id="f-brand" /></div>
-          <div class="fg"><label>Origin</label><input type="text" id="f-origins" /></div>
-          <div class="fg"><label>Quantity</label><input type="number" id="f-qty" /></div>
-          <div class="fg"><label>Unit</label><input type="text" id="f-unit" /></div>
-          <div class="fg"><label>Retail price (฿)</label><input type="number" id="f-retailPrice" step="0.01" /></div>
-          <div class="fg"><label>Online price (฿)</label><input type="number" id="f-onlinePrice" step="0.01" /></div>
-          <div class="fg"><label>Online total (฿)</label><input type="number" id="f-onlineTotal" step="0.01" /></div>
-        </div>
-        <div class="modal-footer">
-          <button class="mf-btn mf-cancel" onclick="closeModal('prod-modal')">Cancel</button>
-          <button class="mf-btn mf-save" onclick="saveProduct()">Save product</button>
-        </div>
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="prod-modal" onclick="handleOverlayClick(event,'prod-modal')">
+    <div class="modal" role="dialog" aria-labelledby="prod-modal-title">
+      <button class="modal-close" onclick="closeModal('prod-modal')" aria-label="Close"><i class="ti ti-x"></i></button>
+      <h3 id="prod-modal-title">Add product</h3>
+      <div class="form-grid">
+        <div class="fg"><label>Status</label><select id="f-direct"><option value="ON">Active (ON)</option><option value="OFF">Inactive (OFF)</option></select></div>
+        <div class="fg"><label>Category</label><select id="f-category"></select></div>
+        <div class="fg full"><label>Product name (ODOO)</label><input type="text" id="f-productOdoo" /></div>
+        <div class="fg full"><label>Thai name</label><input type="text" id="f-productTH" /></div>
+        <div class="fg"><label>UOM / weight</label><input type="text" id="f-secondUom" /></div>
+        <div class="fg"><label>Cost</label><input type="number" id="f-cost" step="0.01" /></div>
+        <div class="fg"><label>Size</label><input type="text" id="f-size" /></div>
+        <div class="fg"><label>Variety</label><input type="text" id="f-variety" /></div>
+        <div class="fg"><label>Brand</label><input type="text" id="f-brand" /></div>
+        <div class="fg"><label>Origin</label><input type="text" id="f-origins" /></div>
+        <div class="fg"><label>Quantity</label><input type="number" id="f-qty" /></div>
+        <div class="fg"><label>Unit</label><input type="text" id="f-unit" /></div>
+        <div class="fg"><label>Retail price (฿)</label><input type="number" id="f-retailPrice" step="0.01" /></div>
+        <div class="fg"><label>Online price (฿)</label><input type="number" id="f-onlinePrice" step="0.01" /></div>
+        <div class="fg"><label>Online total (฿)</label><input type="number" id="f-onlineTotal" step="0.01" /></div>
+      </div>
+      <div class="modal-footer">
+        <button class="mf-btn mf-cancel" onclick="closeModal('prod-modal')">Cancel</button>
+        <button class="mf-btn mf-save" onclick="saveProduct()">Save product</button>
       </div>
     </div>
+  </div>
 
-    <!-- CATEGORY MANAGER MODAL -->
-    <div class="modal-overlay" id="cat-modal" onclick="handleOverlayClick(event,'cat-modal')">
-      <div class="modal" role="dialog" aria-label="Manage categories">
-        <button class="modal-close" onclick="closeModal('cat-modal')" aria-label="Close"><i class="ti ti-x"></i></button>
-        <h3>Manage categories</h3>
-        <div class="cat-manage-grid" id="cat-manage-grid"></div>
-        <div class="cat-add-form">
-          <input type="text" id="new-cat-name" placeholder="New category name…" />
+  <!-- CATEGORY MANAGER MODAL -->
+  <div class="modal-overlay" id="cat-modal" onclick="handleOverlayClick(event,'cat-modal')">
+    <div class="modal cat-modal-wide" role="dialog" aria-labelledby="cat-modal-title">
+      <button class="modal-close" onclick="closeModal('cat-modal')" aria-label="Close"><i class="ti ti-x"></i></button>
+      <h3 id="cat-modal-title">Manage categories</h3>
+
+      <div class="cat-manage-grid" id="cat-manage-grid"></div>
+
+      <!-- ADD panel -->
+      <div id="cat-add-panel">
+        <div class="cat-form-divider">Add new category</div>
+        <div class="cat-add-row">
+          <input type="text" id="new-cat-name" placeholder="Category name…" />
           <select id="new-cat-color">
-            <option value="#8BAC4A,#1A1A1A">Green</option>
+            <option value="#8BAC4A,#fff">Green</option>
             <option value="#D4537E,#fff">Pink</option>
             <option value="#C8A832,#1A1A1A">Yellow</option>
             <option value="#0F6E56,#fff">Teal</option>
@@ -316,91 +159,121 @@
             <option value="#7B5EA7,#fff">Purple</option>
             <option value="#C84040,#fff">Red</option>
             <option value="#5590CC,#fff">Blue</option>
+            <option value="#4A6B1A,#fff">Dark Green</option>
           </select>
-          <button class="mf-btn mf-save" onclick="addCategory()">
-            <i class="ti ti-plus"></i> Add
-          </button>
-        </div>
-        <div class="modal-footer">
-          <button class="mf-btn mf-save" onclick="closeModal('cat-modal')">Done</button>
         </div>
       </div>
-    </div>
 
-    <!-- IMPORT MODAL -->
-    <div class="modal-overlay" id="import-modal" onclick="handleOverlayClick(event,'import-modal')">
-      <div class="modal import-modal-inner" role="dialog" aria-label="Import products">
-        <button class="modal-close" onclick="closeModal('import-modal')" aria-label="Close"><i class="ti ti-x"></i></button>
-        <h3><i class="ti ti-upload" style="font-size:20px;margin-right:8px;color:var(--g)"></i>Import CSV / Excel</h3>
-
-        <!-- Drop zone -->
-        <div class="drop-zone" id="drop-zone"
-          ondragover="ImportModule.onDragOver(event)"
-          ondragleave="ImportModule.onDragLeave(event)"
-          ondrop="ImportModule.onDrop(event)"
-          onclick="document.getElementById('file-input').click()">
-          <i class="ti ti-file-spreadsheet drop-icon"></i>
-          <div class="drop-title">Drop your file here</div>
-          <div class="drop-sub">or click to browse — supports <strong>.csv</strong>, <strong>.xlsx</strong>, <strong>.xls</strong></div>
-          <input type="file" id="file-input" accept=".csv,.xlsx,.xls"
-            style="display:none" onchange="ImportModule.onFileSelect(event)" />
-        </div>
-
-        <!-- Column mapping -->
-        <div id="import-mapping-wrap" style="display:none">
-          <div class="import-section-title">
-            <i class="ti ti-adjustments-horizontal" style="font-size:13px"></i>
-            Column mapping &nbsp;<span id="import-file-name" class="import-badge"></span>
-          </div>
-          <p class="import-hint">Match your spreadsheet columns to CityFresh fields. Unmapped columns are ignored.</p>
-          <div class="mapping-grid" id="mapping-grid"></div>
-        </div>
-
-        <!-- Preview table -->
-        <div id="import-preview-wrap" style="display:none">
-          <div class="import-section-title">
-            <i class="ti ti-eye" style="font-size:13px"></i>
-            Preview &nbsp;<span id="preview-count" class="import-badge"></span>
-          </div>
-          <div class="preview-scroll">
-            <table class="preview-table" id="preview-table"></table>
-          </div>
-        </div>
-
-        <!-- Options -->
-        <div id="import-options-wrap" style="display:none">
-          <div class="import-section-title"><i class="ti ti-settings" style="font-size:13px"></i> Import options</div>
-          <div class="import-options">
-            <label class="opt-row">
-              <input type="radio" name="import-mode" value="append" checked />
-              <span><strong>Append</strong> — add imported rows to existing products</span>
-            </label>
-            <label class="opt-row">
-              <input type="radio" name="import-mode" value="replace" />
-              <span><strong>Replace all</strong> — clear current products and import fresh</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="modal-footer" id="import-footer" style="display:none">
-          <div id="import-status" class="import-status-msg"></div>
-          <button class="mf-btn mf-cancel" onclick="closeModal('import-modal')">Cancel</button>
-          <button class="mf-btn mf-save" id="import-confirm-btn" onclick="ImportModule.confirmImport()">
-            <i class="ti ti-database-import" style="font-size:14px"></i> Import products
-          </button>
+      <!-- EDIT panel -->
+      <div id="cat-edit-panel" style="display:none">
+        <div class="cat-form-divider">Edit category</div>
+        <div class="cat-add-row">
+          <input type="text" id="edit-cat-name" placeholder="Category name…" />
+          <select id="edit-cat-color">
+            <option value="#8BAC4A,#fff">Green</option>
+            <option value="#D4537E,#fff">Pink</option>
+            <option value="#C8A832,#1A1A1A">Yellow</option>
+            <option value="#0F6E56,#fff">Teal</option>
+            <option value="#E68755,#fff">Orange</option>
+            <option value="#7B5EA7,#fff">Purple</option>
+            <option value="#C84040,#fff">Red</option>
+            <option value="#5590CC,#fff">Blue</option>
+            <option value="#4A6B1A,#fff">Dark Green</option>
+          </select>
         </div>
       </div>
-    </div>
 
-  </div><!-- /pg-app -->
+      <!-- Shared icon picker -->
+      <div class="icon-picker-label">
+        Choose icon <span class="icon-picker-hint">(auto-matched by name — pick manually to override)</span>
+      </div>
+      <div class="icon-picker" id="icon-picker"></div>
+      <input type="hidden" id="selected-icon-name" value="" />
+
+      <div class="modal-footer">
+        <button class="mf-btn mf-cancel" id="cat-cancel-btn" onclick="cancelEditCat()" style="display:none">Cancel edit</button>
+        <button class="mf-btn mf-cancel" onclick="closeModal('cat-modal')">Close</button>
+        <button class="mf-btn mf-save" id="cat-save-btn" onclick="saveCategory()">
+          <i class="ti ti-plus" style="font-size:13px"></i> Add category
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPORT MODAL -->
+  <div class="modal-overlay" id="import-modal" onclick="handleOverlayClick(event,'import-modal')">
+    <div class="modal import-modal-inner" role="dialog" aria-label="Import products">
+      <button class="modal-close" onclick="closeModal('import-modal')" aria-label="Close"><i class="ti ti-x"></i></button>
+      <h3><i class="ti ti-upload" style="font-size:20px;margin-right:8px;color:var(--g)"></i>Import CSV / Excel</h3>
+
+      <div class="drop-zone" id="drop-zone"
+        ondragover="ImportModule.onDragOver(event)"
+        ondragleave="ImportModule.onDragLeave(event)"
+        ondrop="ImportModule.onDrop(event)"
+        onclick="document.getElementById('file-input').click()">
+        <i class="ti ti-file-spreadsheet drop-icon"></i>
+        <div class="drop-title">Drop your file here</div>
+        <div class="drop-sub">or click to browse — supports <strong>.csv</strong>, <strong>.xlsx</strong>, <strong>.xls</strong></div>
+        <input type="file" id="file-input" accept=".csv,.xlsx,.xls"
+          style="display:none" onchange="ImportModule.onFileSelect(event)" />
+      </div>
+
+      <div id="import-mapping-wrap" style="display:none">
+        <div class="import-section-title">
+          <i class="ti ti-adjustments-horizontal" style="font-size:13px"></i>
+          Column mapping &nbsp;<span id="import-file-name" class="import-badge"></span>
+        </div>
+        <p class="import-hint">Match your spreadsheet columns to CityFresh fields. Unmapped columns are ignored.</p>
+        <div class="mapping-grid" id="mapping-grid"></div>
+      </div>
+
+      <div id="import-preview-wrap" style="display:none">
+        <div class="import-section-title">
+          <i class="ti ti-eye" style="font-size:13px"></i>
+          Preview &nbsp;<span id="preview-count" class="import-badge"></span>
+        </div>
+        <div class="preview-scroll">
+          <table class="preview-table" id="preview-table"></table>
+        </div>
+      </div>
+
+      <div id="import-options-wrap" style="display:none">
+        <div class="import-section-title"><i class="ti ti-settings" style="font-size:13px"></i> Import options</div>
+        <div class="import-options">
+          <label class="opt-row">
+            <input type="radio" name="import-mode" value="append" checked />
+            <span><strong>Append</strong> — add imported rows to existing products</span>
+          </label>
+          <label class="opt-row">
+            <input type="radio" name="import-mode" value="replace" />
+            <span><strong>Replace all</strong> — clear current products and import fresh</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer" id="import-footer" style="display:none">
+        <div id="import-status" class="import-status-msg"></div>
+        <button class="mf-btn mf-cancel" onclick="closeModal('import-modal')">Cancel</button>
+        <button class="mf-btn mf-save" id="import-confirm-btn" onclick="ImportModule.confirmImport()">
+          <i class="ti ti-database-import" style="font-size:14px"></i> Import products
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- SheetJS for Excel support -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="js/icons.js"></script>
   <script src="js/db.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
   <script src="js/import.js"></script>
+
+  <script>
+    // Boot immediately — no auth needed
+    window.addEventListener('DOMContentLoaded', () => {
+      AppInventory.init();
+    });
+  </script>
 </body>
 </html>
