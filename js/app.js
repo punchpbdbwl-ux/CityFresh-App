@@ -162,6 +162,7 @@ const AppInventory = (() => {
       rows.push(`
         <tr class="group-row ${rep.direct==='OFF'?'row-off':''} ${isExp?'group-expanded':''}"
             onclick="AppInventory.toggleGroup('${safeKey}')"
+<<<<<<< HEAD
             title="Click to ${isExp?'collapse':'expand'} tiers">
           <td onclick="event.stopPropagation()">
             <label class="sw-wrap" title="${rep.direct==='ON'?'Turn off':'Turn on'}">
@@ -169,6 +170,11 @@ const AppInventory = (() => {
                 onchange="AppInventory.toggleStatus(${rep.id}, this)">
               <span class="sw-track"><span class="sw-thumb"></span></span>
             </label>
+=======
+            title="Click to ${isExpanded ? 'collapse' : 'expand'} tiers">
+          <td>
+            <span class="status-pill ${rep.direct === 'ON' ? 'pill-on' : 'pill-off'}">${rep.direct === 'ON' ? 'Active' : 'Off'}</span>
+>>>>>>> parent of 9dd0d6f (change status tab to switch)
           </td>
           <td><span class="cat-chip" style="background:${cs.bg};color:${cs.fg}">${rep.category||'—'}</span></td>
           <td colspan="7">
@@ -228,11 +234,21 @@ const AppInventory = (() => {
     return `
       <tr class="tier-row ${p.direct==='OFF'?'row-off':''} ${last?'tier-last':''}">
         <td>
+<<<<<<< HEAD
           <label class="sw-wrap" title="${p.direct==='ON'?'Turn off':'Turn on'}">
             <input type="checkbox" class="sw-input" ${p.direct==='ON'?'checked':''}
               onchange="AppInventory.toggleStatus(${p.id}, this)">
             <span class="sw-track"><span class="sw-thumb"></span></span>
           </label>
+=======
+          <span class="tier-num">#${idx + 1}</span>
+        </td>
+        <td>
+          <button class="tier-status-btn ${p.direct === 'ON' ? 'ts-on' : 'ts-off'}"
+            onclick="AppInventory.toggleStatus(${p.id})" title="Toggle status">
+            ${p.direct === 'ON' ? 'Active' : 'Off'}
+          </button>
+>>>>>>> parent of 9dd0d6f (change status tab to switch)
         </td>
         <td><span class="tier-num">${idx+1}</span></td>
         <td style="font-size:12px;color:var(--soft)">${p.secondUom||'—'}</td>
@@ -258,10 +274,17 @@ const AppInventory = (() => {
     return `
       <tr class="tier-row tier-editing ${last?'tier-last':''}">
         <td>
+<<<<<<< HEAD
           <label class="sw-wrap">
             <input type="checkbox" class="sw-input" id="ie-direct-chk" ${p.direct==='ON'?'checked':''}>
             <span class="sw-track"><span class="sw-thumb"></span></span>
           </label>
+=======
+          <select class="ie-sel" id="ie-direct" style="width:72px">
+            <option value="ON" ${p.direct==='ON'?'selected':''}>Active</option>
+            <option value="OFF" ${p.direct==='OFF'?'selected':''}>Off</option>
+          </select>
+>>>>>>> parent of 9dd0d6f (change status tab to switch)
         </td>
         <td><span class="tier-num edit-active">✎</span></td>
         <td><input class="ie-in" id="ie-secondUom" value="${v('secondUom')}" placeholder="UOM"/></td>
@@ -338,9 +361,59 @@ const AppInventory = (() => {
     }
   }
 
+<<<<<<< HEAD
   // ── Delete ────────────────────────────────────────────────────────
   async function deleteTier(id) {
     const p        = _products.find(x => x.id === id);
+=======
+  // ── Inline edit ────────────────────────────────────────────────────
+  function startInlineEdit(id) {
+    editingId = id;
+    renderTable();
+    // Focus first field
+    requestAnimationFrame(() => {
+      const el = document.getElementById('ie-secondUom');
+      if (el) el.focus();
+    });
+  }
+
+  function saveInlineEdit(id) {
+    const g = elId => {
+      const el = document.getElementById(elId);
+      return el ? el.value.trim() : '';
+    };
+    const num = elId => {
+      const v = g(elId);
+      return v === '' ? '' : parseFloat(v);
+    };
+
+    DB.Products.update(id, {
+      direct:      g('ie-direct'),
+      secondUom:   g('ie-secondUom'),
+      size:        g('ie-size'),
+      variety:     g('ie-variety'),
+      origins:     g('ie-origins'),
+      qty:         parseInt(g('ie-qty')) || 0,
+      unit:        g('ie-unit'),
+      retailPrice: num('ie-retailPrice'),
+      onlinePrice: num('ie-onlinePrice'),
+      onlineTotal: num('ie-onlineTotal'),
+    });
+    editingId = null;
+    renderTable();
+    showToast('Tier saved');
+  }
+
+  function cancelInlineEdit() {
+    editingId = null;
+    renderTable();
+  }
+
+  // ── Delete tier / group ────────────────────────────────────────────
+  function deleteTier(id) {
+    // Find which group this belongs to
+    const p = DB.Products.all().find(x => x.id === id);
+>>>>>>> parent of 9dd0d6f (change status tab to switch)
     if (!p) return;
     const siblings = _products.filter(x => groupKey(x) === groupKey(p));
     const msg      = siblings.length === 1 ? 'Only tier — delete the product?' : 'Delete this pricing tier?';
