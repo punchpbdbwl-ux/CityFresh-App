@@ -224,6 +224,52 @@ td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .pill-on  { background: #EAF3DE; color: #3B6D11; }
 .pill-off { background: #FCEBEB; color: #A32D2D; }
 
+/* ── Toggle Switch ── */
+.sw-wrap {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+.sw-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.sw-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 20px;
+  background: #D5D0C4;
+  transition: background .22s ease;
+  flex-shrink: 0;
+  display: block;
+}
+.sw-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  transition: transform .22s ease, box-shadow .22s ease;
+  display: block;
+}
+.sw-input:checked + .sw-track {
+  background: var(--g);
+}
+.sw-input:checked + .sw-track .sw-thumb {
+  transform: translateX(16px);
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.sw-wrap:hover .sw-track { filter: brightness(.93); }
+.sw-wrap:active .sw-thumb { width: 16px; }
+
 .cat-chip { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
 .prod-name  { font-weight: 500; color: var(--ink); line-height: 1.3; font-size: 13px; }
 .prod-thai  { font-size: 11px; color: var(--soft); margin-top: 1px; }
@@ -293,29 +339,6 @@ td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .mf-cancel:hover { border-color: var(--soft); }
 .mf-save { background: var(--g); border: 1px solid var(--g); color: #fff; }
 .mf-save:hover { background: var(--gd); }
-
-/* ── Mode badge & loading bar ── */
-.mode-badge {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 20px;
-  letter-spacing: .3px;
-  white-space: nowrap;
-}
-.mode-live    { background: rgba(139,172,74,.2); color: #B8D878; border: 1px solid rgba(139,172,74,.35); }
-.mode-offline { background: rgba(255,255,255,.07); color: #6A6860; border: 1px solid rgba(255,255,255,.1); }
-
-#loading-bar {
-  height: 3px;
-  background: linear-gradient(90deg, var(--g) 0%, #C8D878 50%, var(--g) 100%);
-  background-size: 200% 100%;
-  animation: bar-slide 1.2s linear infinite;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-}
-@keyframes bar-slide { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
 /* ── Category button SVG icons ── */
 .cat-btn { gap: 6px; }
@@ -681,21 +704,6 @@ td.num { text-align: right; font-variant-numeric: tabular-nums; }
   color: #fff;
   font-size: 13px;
 }
-
-.tier-status-btn {
-  border: none;
-  border-radius: 12px;
-  padding: 3px 8px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  cursor: pointer;
-  letter-spacing: .4px;
-  transition: opacity .15s;
-}
-.tier-status-btn:hover { opacity: .75; }
-.ts-on  { background: #EAF3DE; color: #3B6D11; }
-.ts-off { background: #FCEBEB; color: #A32D2D; }
 
 /* ══════════════════════════════════
    INLINE EDITING
