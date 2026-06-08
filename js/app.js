@@ -155,7 +155,11 @@ const AppInventory = (() => {
             onclick="AppInventory.toggleGroup('${safeKey}')"
             title="Click to ${isExpanded ? 'collapse' : 'expand'} tiers">
           <td>
-            <span class="status-pill ${rep.direct === 'ON' ? 'pill-on' : 'pill-off'}">${rep.direct === 'ON' ? 'Active' : 'Off'}</span>
+            <label class="sw-wrap" onclick="event.stopPropagation()" title="${rep.direct === 'ON' ? 'Turn off' : 'Turn on'}">
+              <input type="checkbox" class="sw-input" ${rep.direct === 'ON' ? 'checked' : ''}
+                onchange="AppInventory.toggleStatus(${rep.id})">
+              <span class="sw-track"><span class="sw-thumb"></span></span>
+            </label>
           </td>
           <td>
             <span class="cat-chip" style="background:${cs.bg};color:${cs.fg}">${rep.category || '—'}</span>
@@ -234,10 +238,11 @@ const AppInventory = (() => {
           <span class="tier-num">#${idx + 1}</span>
         </td>
         <td>
-          <button class="tier-status-btn ${p.direct === 'ON' ? 'ts-on' : 'ts-off'}"
-            onclick="AppInventory.toggleStatus(${p.id})" title="Toggle status">
-            ${p.direct === 'ON' ? 'Active' : 'Off'}
-          </button>
+          <label class="sw-wrap" title="${p.direct === 'ON' ? 'Turn off' : 'Turn on'}">
+            <input type="checkbox" class="sw-input" ${p.direct === 'ON' ? 'checked' : ''}
+              onchange="AppInventory.toggleStatus(${p.id})">
+            <span class="sw-track"><span class="sw-thumb"></span></span>
+          </label>
         </td>
         <td style="font-size:12px;color:var(--soft)">${p.secondUom || '—'}</td>
         <td style="font-size:12px">${p.size || '—'}</td>
@@ -268,10 +273,10 @@ const AppInventory = (() => {
       <tr class="tier-row tier-editing">
         <td><span class="tier-num edit-active">✎</span></td>
         <td>
-          <select class="ie-sel" id="ie-direct" style="width:72px">
-            <option value="ON" ${p.direct==='ON'?'selected':''}>Active</option>
-            <option value="OFF" ${p.direct==='OFF'?'selected':''}>Off</option>
-          </select>
+          <label class="sw-wrap">
+            <input type="checkbox" class="sw-input" id="ie-direct-chk" ${p.direct === 'ON' ? 'checked' : ''}>
+            <span class="sw-track"><span class="sw-thumb"></span></span>
+          </label>
         </td>
         <td><input class="ie-in" id="ie-secondUom" value="${v('secondUom')}" placeholder="UOM" /></td>
         <td><input class="ie-in" id="ie-size" value="${v('size')}" placeholder="Size" style="width:52px"/></td>
@@ -329,7 +334,7 @@ const AppInventory = (() => {
     };
 
     DB.Products.update(id, {
-      direct:      g('ie-direct'),
+      direct:      document.getElementById('ie-direct-chk')?.checked ? 'ON' : 'OFF',
       secondUom:   g('ie-secondUom'),
       size:        g('ie-size'),
       variety:     g('ie-variety'),
